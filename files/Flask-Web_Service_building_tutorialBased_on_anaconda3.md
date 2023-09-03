@@ -147,7 +147,7 @@ We use different method in HTTP to deal with URL(Such as Get, Post......).
 ```python
 from flask import request
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', method=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         return index()
@@ -155,49 +155,3 @@ def login():
         return 'You should use Post method.'
 ```
 
-### 3 Small Demo
-
-We will write a module for file uploading as an example.
-
-If you want to know the name of a file on the client system before it is uploaded, you can use the filename attribute. However, keep in mind that this value can be forged and should never be trusted. If you want to use the client's filename as the server's filename, you can use the secure_filename() function provided by Werkzeug.
-
-```python
-from flask import Flask, escape, url_for, request, jsonify
-from werkzeug.utils import secure_filename
-
-app = Flask(__name__)
-
-
-@app.route('/')
-def index():
-    return 'Index Page'
-
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        f = request.files['file']
-        f.save('./files/' + secure_filename(f.filename))
-        return jsonify(message='File uploaded successfully')
-    else:
-        return jsonify(message='File uploaded filed')
-
-
-with app.test_request_context():
-    print(url_for('index'))
-    print(url_for('author', next='/'))
-    print(url_for('show_user_profile', username='Johnson'))
-
-```
-
-And now you can use API tools to send your file, it will be stored in Flask/files
-
-Just like this:
-
-![ApiFox](https://i.imgur.com/q44ruCl.png)
-
-## 3 GitHub Repository
-
-I have already push python project to GitHub, you can clone it for test.
-
-*https://github.com/liuhangming-js/FlaskDemo*
